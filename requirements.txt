@@ -5,5 +5,4 @@ plotly
 geopandas
 google.generativeai
 joblib
-pickle
 scikit-learn
