@@ -4,3 +4,4 @@ altair
 plotly
 geopandas
 google.generativeai
+joblib
