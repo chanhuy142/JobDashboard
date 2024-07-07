@@ -7,6 +7,7 @@ import geopandas as gpd
 
 st.set_page_config(
     page_title="Tình hình việc làm ở Việt Nam",
+    page_icon="📊",
     
     layout="wide",
     )

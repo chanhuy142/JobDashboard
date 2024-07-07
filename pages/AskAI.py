@@ -3,18 +3,22 @@ import streamlit as st
 import google.generativeai as genai
 
 isFile=False
-genai.configure(api_key="AIzaSyBbne8vLPP05PJsyoacNVMUe67KP3OSrGE")
+#print(st.secrets["api_key"])
+genai.configure(api_key=st.secrets["api_key"])
 
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 
 
     
-#sample_file=genai.upload_file(path="data.txt",name="mybobodata142")
+#sample_file=genai.upload_file(path="data.txt",name="myjobdata1420032")
+file = genai.get_file(name="myjobdata1420032")
 
-file = genai.get_file(name="mybobodata142")
+#sample_file=genai.upload_file(path="data.txt")
+#file = genai.get_file(name="myjobdata1420032")
 
-
+#sample_file=genai.upload_file(path="a.jpg",name="myimagedata1420032")
+#file = genai.get_file(name="myimagedata1420032")
 
 #generate session state if not exist
 if 'chat-history' not in st.session_state:
@@ -41,10 +45,9 @@ def get_response(input_message):
     else:
         messages.append({'role':'user',
                     'parts':[input_message]})
-    try:
-        response = response = model.generate_content(messages)
-    except Exception as e:
-        response = str(e)
+    
+    response = response = model.generate_content(messages)
+   
     
     return response
 
