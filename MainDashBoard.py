@@ -45,7 +45,7 @@ with st.sidebar:
     
 
 
-col = st.columns((1,1), gap='small')
+col = st.columns((2,1.5,2), gap='small')
 
 with col[0]:
     total_pos =df_filter['Số lượng tuyển'].count()
@@ -57,12 +57,12 @@ with col[0]:
     
     st.markdown('#### Tổng quan')
 
-    st.markdown(f'<div style="width:50%;background-color:#262730;color:white;font-size:20px;border-radius:2px;text-align:center;padding:5px; padding-right:5px; padding-left:5px"> <div style="font-size: 30px; font-weight: bold">{total_pos}</div><div>Số công việc</div> </div>', 
+    st.markdown(f'<div style="background-color:#262730;color:white;font-size:20px;border-radius:2px;text-align:center;padding:5px; padding-right:5px; padding-left:5px"> <div style="font-size: 30px; font-weight: bold">{total_pos}</div><div>Số công việc</div> </div>', 
                 unsafe_allow_html=True)
     #make a little gap only space between the box and the next box
     st.markdown(f'<div style="height: 20px;"></div>', unsafe_allow_html=True)
     # tạo 1 box có witdh height và background color để hiển thị số lượng công việc
-    st.markdown(f'<div style="width:50%;background-color:#262730;color:white;font-size:20px;border-radius:2px;text-align:center;padding:5px; padding-right:5px; padding-left:5px"> <div style="font-size: 30px; font-weight: bold">{total_job}</div><div>Số lượng tuyển</div> </div>', 
+    st.markdown(f'<div style="background-color:#262730;color:white;font-size:20px;border-radius:2px;text-align:center;padding:5px; padding-right:5px; padding-left:5px"> <div style="font-size: 30px; font-weight: bold">{total_job}</div><div>Số lượng tuyển</div> </div>', 
                 unsafe_allow_html=True)
     #make a little gap only space between the box and the next box
     st.markdown(f'<div style="height: 20px;"></div>', unsafe_allow_html=True)
@@ -70,7 +70,7 @@ with col[0]:
 
     total_job_title = df_filter['Công việc chính'].nunique()
     total_job_title = int(total_job_title)
-    st.markdown(f'<div style="width:50%;background-color:#262730;color:white;font-size:20px;border-radius:2px;text-align:center;padding:5px; padding-right:5px; padding-left:5px; "> <div style="font-size: 30px; font-weight: bold">{total_job_title}</div><div>Ngành nghề</div> </div>',
+    st.markdown(f'<div style="background-color:#262730;color:white;font-size:20px;border-radius:2px;text-align:center;padding:5px; padding-right:5px; padding-left:5px; "> <div style="font-size: 30px; font-weight: bold">{total_job_title}</div><div>Ngành nghề</div> </div>',
     unsafe_allow_html=True)
     st.markdown(f'<div style="height: 50px;"></div>', unsafe_allow_html=True)
 
@@ -81,8 +81,33 @@ with col[0]:
     fig.update_layout(bargap=0.1, autosize=False, width=450, height=200)
     with st.container(height=200):
         st.plotly_chart(fig, use_container_width=True)
-
 with col[1]:
+    st.markdown(f'<div style="height: 20px;"></div>', unsafe_allow_html=True)
+    with st.container(height=310):
+        #lấy ra các loại bằng cấp, đếm công việc theo từng loại, tạo dataframe mới rồi ve bar chart
+        df_degree = df_filter['Yêu cầu bằng cấp'].value_counts().reset_index()
+        df_degree.columns = ['Yêu cầu bằng cấp', 'Số lượng công việc']
+        fig=px.pie(df_degree, values='Số lượng công việc', names='Yêu cầu bằng cấp', color='Yêu cầu bằng cấp')
+        
+        fig.update_traces(textposition='inside')
+        fig.update_layout(title={
+            'text': "Số lượng công việc theo bằng cấp",
+            },uniformtext_minsize=7, uniformtext_mode='hide'
+        )
+        st.plotly_chart(fig, use_container_width=False)
+    st.markdown(f'<div style="height: 20px;"></div>', unsafe_allow_html=True)
+    with st.container(height=310):
+        #lấy ra các loại Nhóm tuổi, đếm công việc theo từng loại, tạo dataframe mới rồi ve pie chart
+        df_age = df_filter['Nhóm tuổi'].value_counts().reset_index()
+        df_age.columns = ['Nhóm tuổi', 'Số lượng công việc']
+        fig=px.pie(df_age, values='Số lượng công việc', names='Nhóm tuổi', color='Nhóm tuổi')
+        fig.update_traces(textposition='inside')
+        fig.update_layout(title={
+            'text': "Số lượng công việc theo nhóm tuổi",
+            },uniformtext_minsize=7, uniformtext_mode='hide'
+        )
+        st.plotly_chart(fig, use_container_width=False)
+with col[2]:
     
         
     #create world map
