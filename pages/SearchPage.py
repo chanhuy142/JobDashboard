@@ -3,7 +3,8 @@ import pandas as pd
 
 st.title('Tìm kiếm công việc theo nhu cầu')
 
-df = pd.read_csv('data/cleaned_dataset.csv')
+# Load the dataset
+df = pd.read_csv('./data/cleaned_dataset.csv')
 
 # Define all your categories and columns
 categorical_columns = ['Khu vực tuyển', 'Yêu cầu giới tính', 'Cấp bậc', 'Hình thức làm việc', 'Yêu cầu bằng cấp', 'Yêu cầu kinh nghiệm', 'Loại công ty', 'Nhóm tuổi']
