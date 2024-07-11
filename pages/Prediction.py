@@ -1,6 +1,13 @@
 import streamlit as st
 import joblib
 import pandas as pd
+st.set_page_config(
+    page_title="Tình hình việc làm ở Việt Nam",
+    page_icon="📊",
+    
+    layout="wide",
+    )
+
 
 # Cấu hình giao diện người dùng
 st.title("Mức Lương và Mức độ cạnh tranh của công việc mà bạn đang quan tâm ")
@@ -39,28 +46,7 @@ label_encoders = {
     for col in label_encoded_columns
 }
 
-st.markdown(
-    """
-    <style>
-    .main {
-        background-color: #f0f2f6;
-    }
-    h1 {
-        color: #333;
-    }
-    .highlight {
-        font-size: 24px;
-        font-weight: bold;
-        color: #ff6347;
-    }
-    .column-label {
-        font-size: 18px;
-        font-weight: bold;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+
 
 # Tạo các input cho người dùng nhập liệu
 user_input = {}
@@ -78,7 +64,7 @@ else:
     related_job2 = st.selectbox(column_translations['Related_Job2'], label_encoders['Related_Job2'].classes_)
 
 if main_job == related_job1 or main_job == related_job2 or (related_job1 != "Không yêu cầu thêm" and related_job1 == related_job2):
-    st.warning("Các công việc không được chọn trùng nhau.")
+    st.error("Các công việc không được chọn trùng nhau.")
 else:
     user_input['Main_Job'] = main_job
     user_input['Related_Job1'] = related_job1

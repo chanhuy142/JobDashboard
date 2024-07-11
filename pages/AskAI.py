@@ -11,8 +11,9 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 
 
     
-#sample_file=genai.upload_file(path="data.txt",name="myjobdata1420032")
-file = genai.get_file(name="myjobdata1420032")
+#sample_file=genai.upload_file(path="./data/cleaned_dataset.csv",name="huybhhu")
+#file = genai.get_file(name="myjobdata1420032")
+file=genai.get_file(name="huybhhu")
 
 #sample_file=genai.upload_file(path="data.txt")
 #file = genai.get_file(name="myjobdata1420032")

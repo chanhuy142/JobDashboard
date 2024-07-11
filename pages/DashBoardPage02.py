@@ -96,7 +96,7 @@ col1, col2, col3 = st.columns([2, 3, 2])
 col4, col5, col6 = st.columns(3)
 
 with col1:
-    st.subheader("Phân bố mức lương trung bình theo giới tính")
+    st.subheader("Phân bố mức lương trung bình")
     # Biểu đồ histogram cho mức lương trung bình, phân biệt theo giới tính
     fig = px.histogram(df_filter, x='Lương trung bình', nbins=30, color_discrete_sequence=['skyblue'])
     fig.update_traces(opacity=0.75)
