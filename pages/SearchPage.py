@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # Load the dataset
-df = pd.read_csv('cleaned_dataset.csv')
+df = pd.read_csv('data/cleaned_dataset.csv')
 
 # Ensure column names match those in the DataFrame
 categorical_columns = ['Khu vực tuyển', 'Yêu cầu giới tính', 'Cấp bậc', 'Hình thức làm việc', 'Yêu cầu bằng cấp', 'Yêu cầu kinh nghiệm', 'Loại công ty', 'Nhóm tuổi', 'Công việc chính']
