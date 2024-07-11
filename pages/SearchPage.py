@@ -1,73 +1,64 @@
 import streamlit as st
 import pandas as pd
 
-# Load the dataset
 df = pd.read_csv('cleaned_dataset.csv')
 
-# Ensure column names match those in the DataFrame
-categorical_columns = ['Khu vực tuyển', 'Yêu cầu giới tính', 'Cấp bậc', 'Hình thức làm việc', 'Yêu cầu bằng cấp', 'Yêu cầu kinh nghiệm', 'Loại công ty', 'Nhóm tuổi', 'Công việc chính']
+categorical_columns = ['Khu vực tuyển', 'Yêu cầu giới tính', 'Cấp bậc', 'Hình thức làm việc', 'Yêu cầu bằng cấp', 'Yêu cầu kinh nghiệm', 'Loại công ty', 'Nhóm tuổi']
 numerical_columns = ['Lương trung bình']
+job_columns = ['Công việc chính', 'Công việc liên quan 1', 'Công việc liên quan 2']
 
-# Check if all columns exist in the DataFrame
-for col in categorical_columns + numerical_columns:
+for col in categorical_columns + numerical_columns + job_columns:
     if col not in df.columns:
         st.error(f"Column '{col}' not found in DataFrame.")
         st.stop()
 
-# Create a dictionary to store the selected values
+job_options = set()
+for col in job_columns:
+    job_options.update(df[col].dropna().unique())
+
+job_options = sorted(job_options)
+
 selections = {}
 
 st.title('Tìm kiếm công việc')
 
-# Split categorical columns into two rows
-split_idx = len(categorical_columns) // 2
-cat_columns_row1 = categorical_columns[:split_idx]
-cat_columns_row2 = categorical_columns[split_idx:]
+split_index = len(categorical_columns) // 2
+categorical_row1 = categorical_columns[:split_index]
+categorical_row2 = categorical_columns[split_index:]
 
-# Create columns for the first row of categorical filters
-cat_cols_row1 = st.columns(len(cat_columns_row1))
+row1_cols = st.columns(len(categorical_row1))
+for idx, col_name in enumerate(categorical_row1):
+    with row1_cols[idx]:
+        options = ['Toàn bộ'] + df[col_name].unique().tolist()
+        selections[col_name] = st.selectbox(f'{col_name}', options)
 
-# Loop through each categorical feature in the first row and create a selectbox for it
-for idx, feature in enumerate(cat_columns_row1):
-    if feature == 'Khu vực tuyển':
-        options = ['Toàn bộ'] + list(set(', '.join(df[feature].dropna().unique()).split(', ')))
-    else:
-        options = ['Toàn bộ'] + df[feature].unique().tolist()  # Add 'Toàn bộ' option to the unique options list
-    
-    with cat_cols_row1[idx]:
-        selections[feature] = st.selectbox(f'{feature}', options)
+row2_cols = st.columns(len(categorical_row2))
+for idx, col_name in enumerate(categorical_row2):
+    with row2_cols[idx]:
+        options = ['Toàn bộ'] + df[col_name].unique().tolist()
+        selections[col_name] = st.selectbox(f'{col_name}', options)
 
-# Create columns for the second row of categorical filters
-cat_cols_row2 = st.columns(len(cat_columns_row2))
+selections['Ngành nghề'] = st.selectbox('Ngành nghề', ['Toàn bộ'] + job_options)
 
-# Loop through each categorical feature in the second row and create a selectbox for it
-for idx, feature in enumerate(cat_columns_row2):
-    # For 'Từ khóa', split values by ';' and get unique options
-    if feature == 'Khu vực tuyển':
-        options = ['Toàn bộ'] + list(set(', '.join(df[feature].dropna().unique()).split(', ')))
-    else:
-        options = ['Toàn bộ'] + df[feature].unique().tolist()  # Add 'Toàn bộ' option to the unique options list
-    
-    with cat_cols_row2[idx]:
-        selections[feature] = st.selectbox(f'{feature}', options)
-
-# Create sliders for numerical columns
 for feature in numerical_columns:
     min_value = df[feature].min()
     max_value = df[feature].max()
     selections[feature] = st.slider(f'{feature}', min_value, max_value, (min_value, max_value))
 
-# Filter the DataFrame based on selections
 filtered_df = df.copy()
 for feature, selected_value in selections.items():
-    if feature in categorical_columns and selected_value != 'Toàn bộ':
-        if feature == 'Từ khóa':
-            filtered_df = filtered_df[filtered_df[feature].apply(lambda x: selected_value in x.split('; '))]
-        else:
+    if selected_value != 'Toàn bộ':
+        if feature == 'Ngành nghề':
+            filtered_df = filtered_df[df[job_columns].apply(lambda x: selected_value in x.values, axis=1)]
+        elif feature in categorical_columns:
             filtered_df = filtered_df[filtered_df[feature] == selected_value]
-    elif feature in numerical_columns:
-        filtered_df = filtered_df[(filtered_df[feature] >= selected_value[0]) & (filtered_df[feature] <= selected_value[1])]
+        elif feature in numerical_columns:
+            filtered_df = filtered_df[(filtered_df[feature] >= selected_value[0]) & (filtered_df[feature] <= selected_value[1])]
 
-# Display the filtered DataFrame
+total_job = filtered_df['Số lượng tuyển'].sum()
+total_job = int(total_job)
+
+st.markdown(f'Số lượng công việc phù hợp với yêu cầu của bạn: **{total_job}**')
+
 st.write('Công việc phù hợp với yêu cầu của bạn:')
-st.dataframe(filtered_df)
+st.dataframe(filtered_df.drop(columns=['Ngày cập nhật', 'Lượt xem']))
