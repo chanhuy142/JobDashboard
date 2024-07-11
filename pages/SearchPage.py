@@ -1,15 +1,10 @@
 import streamlit as st
 import pandas as pd
 
-<<<<<<< HEAD
 st.title('Tìm kiếm công việc theo nhu cầu')
 
 # Load the dataset
 df = pd.read_csv('cleaned_dataset.csv')
-=======
-# Load the dataset
-df = pd.read_csv('data/cleaned_dataset.csv')
->>>>>>> d70a9f3d13d9e3c5a64d8c34eee79cfdc8b732c2
 
 # Define all categories and columns
 categorical_columns = ['Khu vực tuyển', 'Yêu cầu giới tính', 'Cấp bậc', 'Hình thức làm việc', 'Yêu cầu bằng cấp', 'Yêu cầu kinh nghiệm', 'Loại công ty', 'Nhóm tuổi']
