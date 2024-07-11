@@ -205,7 +205,9 @@ with col2:
     df_reshaped["Ngày"] = df_reshaped["Ngày cập nhật"].dt.date
 
     # Tính tổng số lượng tuyển theo ngày
-    df_daily = df_reshaped.groupby("Ngày")["Số lượng tuyển"].sum().reset_index()
+    df_daily = (
+        df_reshaped.groupby("Ngày")["Số lượng tuyển"].count().reset_index()
+    )
 
     # Vẽ biểu đồ đường
     fig = px.line(
