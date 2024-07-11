@@ -28,10 +28,10 @@ column_translations = {
 }
 
 # Tải mô hình dự đoán lương
-salary_model = joblib.load("./models/Salary_Model/Random Forest.pkl")
+salary_model = joblib.load("./models/Salary_Model/KNN.pkl")
 
 # Tải mô hình dự đoán số người quan tâm
-interest_model = joblib.load("./models/Views_Model/Random Forest.pkl")
+interest_model = joblib.load("./models/Views_Model/KNN.pkl")
 
 # Tải Label Encoders
 label_encoders = {
@@ -78,7 +78,7 @@ else:
     related_job2 = st.selectbox(column_translations['Related_Job2'], label_encoders['Related_Job2'].classes_)
 
 if main_job == related_job1 or main_job == related_job2 or (related_job1 != "Không yêu cầu thêm" and related_job1 == related_job2):
-    st.error("Các công việc không được chọn trùng nhau.")
+    st.warning("Các công việc không được chọn trùng nhau.")
 else:
     user_input['Main_Job'] = main_job
     user_input['Related_Job1'] = related_job1

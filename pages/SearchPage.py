@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 
-df = pd.read_csv('cleaned_dataset.csv')
+# Load the dataset
+df = pd.read_csv('data/cleaned_dataset.csv')
 
 categorical_columns = ['Khu vực tuyển', 'Yêu cầu giới tính', 'Cấp bậc', 'Hình thức làm việc', 'Yêu cầu bằng cấp', 'Yêu cầu kinh nghiệm', 'Loại công ty', 'Nhóm tuổi']
 numerical_columns = ['Lương trung bình']
