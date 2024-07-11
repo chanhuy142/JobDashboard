@@ -30,7 +30,8 @@ job_titles = ['Tất cả'] + sorted([title for title in job_titles if pd.notna(
 with st.sidebar:
     st.title('Tình hình việc làm ở Việt Nam')
 
-    # Filter by area
+
+    # area
     area_list = ['Tất cả'] + list(df_exploded['Khu vực tuyển'].unique())
     area = st.selectbox('Chọn khu vực tuyển', area_list)
     if area != 'Tất cả':
@@ -38,7 +39,7 @@ with st.sidebar:
     else:
         df_filter = df
 
-    # Filter by job title
+    # job title
     job_title = st.selectbox('Chọn ngành nghề', job_titles)
     if job_title != 'Tất cả':
         df_filter = df_filter[
@@ -47,7 +48,7 @@ with st.sidebar:
             (df_filter['Công việc liên quan 2'] == job_title)
         ]
 
-    # Filter by age group
+    # age group
     age_list = ['Tất cả'] + list(df['Nhóm tuổi'].unique())
     age = st.selectbox('Chọn nhóm tuổi', age_list)
     if age != 'Tất cả':
@@ -82,6 +83,12 @@ with st.sidebar:
     experience = st.selectbox('Chọn yêu cầu kinh nghiệm', experience_list)
     if experience != 'Tất cả':
         df_filter = df_filter[df_filter['Yêu cầu kinh nghiệm'] == experience]
+        
+    # Filter by average salary
+    min_salary = df['Lương trung bình'].min()
+    max_salary = df['Lương trung bình'].max()
+    salary_range = st.slider('Khoảng mức lương trung bình', min_salary, max_salary, (min_salary, max_salary))
+    df_filter = df_filter[(df_filter['Lương trung bình'] >= salary_range[0]) & (df_filter['Lương trung bình'] <= salary_range[1])]
 
 st.title("Phân tích chi tiết mức lương")
 
