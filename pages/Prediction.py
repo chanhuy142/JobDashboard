@@ -1,6 +1,13 @@
 import streamlit as st
 import joblib
 import pandas as pd
+st.set_page_config(
+    page_title="Tình hình việc làm ở Việt Nam",
+    page_icon="📊",
+    
+    layout="wide",
+    )
+
 
 # Cấu hình giao diện người dùng
 st.title("Mức Lương và Mức độ cạnh tranh của công việc mà bạn đang quan tâm ")
@@ -28,10 +35,10 @@ column_translations = {
 }
 
 # Tải mô hình dự đoán lương
-salary_model = joblib.load("./models/Salary_Model/Random Forest.pkl")
+salary_model = joblib.load("./models/Salary_Model/KNN.pkl")
 
 # Tải mô hình dự đoán số người quan tâm
-interest_model = joblib.load("./models/Views_Model/Random Forest.pkl")
+interest_model = joblib.load("./models/Views_Model/KNN.pkl")
 
 # Tải Label Encoders
 label_encoders = {
@@ -39,28 +46,7 @@ label_encoders = {
     for col in label_encoded_columns
 }
 
-st.markdown(
-    """
-    <style>
-    .main {
-        background-color: #f0f2f6;
-    }
-    h1 {
-        color: #333;
-    }
-    .highlight {
-        font-size: 24px;
-        font-weight: bold;
-        color: #ff6347;
-    }
-    .column-label {
-        font-size: 18px;
-        font-weight: bold;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+
 
 # Tạo các input cho người dùng nhập liệu
 user_input = {}

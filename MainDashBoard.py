@@ -13,7 +13,7 @@ st.set_page_config(
     )
 alt.themes.enable("dark")
 
-df_reshaped = pd.read_csv('cleaned_dataset.csv')
+df_reshaped = pd.read_csv('data/cleaned_dataset.csv')
 
 with st.sidebar:
     st.title('Tình hình việc làm ở Việt Nam')
