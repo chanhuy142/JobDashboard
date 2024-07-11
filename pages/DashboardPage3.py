@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+import networkx as nx
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -127,6 +129,9 @@ with col1:
     st.plotly_chart(fig)
 
 with col3:
+
+    st.markdown("###### **Từ khóa phổ biến**")
+
     # Split các giá trị trong cột 'Từ khoá' và vẽ word cloud
     df_reshaped["Từ khóa"] = df_reshaped["Từ khóa"].str.split("; ")
     df_keywords = df_reshaped.explode("Từ khóa")
@@ -138,8 +143,12 @@ with col3:
         width=800, height=400, background_color="#0f1116"
     ).generate(df_keywords["Từ khóa"].to_string(index=False))
     st.image(
-        wordcloud.to_image(), caption="Từ khóa phổ biến", use_column_width=True
+        wordcloud.to_image(),
+        caption="Từ khóa phổ biến",
+        use_column_width=True,
     )
+    # Thêm tiêu đề cho wordcloud bằng kích thước tiêu đề của các biểu đồ khác
+
 
 with col4:
     df_grouped = (
