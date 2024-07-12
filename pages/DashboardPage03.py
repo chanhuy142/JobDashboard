@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import networkx as nx
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -56,11 +55,11 @@ col1, col2 = st.columns(2, gap="small")
 col3, col4 = st.columns(2, gap="small")
 with col1:
     # Giả sử bạn đã có dữ liệu df_highsalary
-    upper_quartile = df_reshaped["Lương trung bình"].quantile(0.75)
-    df_highsalary = df_reshaped[
-        df_reshaped["Lương trung bình"] >= upper_quartile
+    upper_quartile = df_filter["Lương trung bình"].quantile(0.75)
+    df_highsalary = df_filter[
+        df_filter["Lương trung bình"] >= upper_quartile
     ]
-    df_exp = df_reshaped.copy()
+    df_exp = df_filter.copy()
     df_copy_grouped = df_exp.groupby("Công việc chính")["Số lượng tuyển"].sum()
     df_copy_grouped = pd.DataFrame(df_copy_grouped)
     df_highsalary_grouped = df_highsalary.groupby("Công việc chính")[
@@ -133,8 +132,8 @@ with col3:
     st.markdown("###### **Từ khóa phổ biến**")
 
     # Split các giá trị trong cột 'Từ khoá' và vẽ word cloud
-    df_reshaped["Từ khóa"] = df_reshaped["Từ khóa"].str.split("; ")
-    df_keywords = df_reshaped.explode("Từ khóa")
+    df_filter["Từ khóa"] = df_filter["Từ khóa"].str.split("; ")
+    df_keywords = df_filter.explode("Từ khóa")
     df_keywords = df_keywords["Từ khóa"].value_counts().reset_index()
     df_keywords.columns = ["Từ khóa", "Số lượng"]
     df_keywords = df_keywords.sort_values(by="Số lượng", ascending=False)
@@ -152,7 +151,7 @@ with col3:
 
 with col4:
     df_grouped = (
-        df_reshaped.groupby("Công việc chính")["Lượt xem"].sum().reset_index()
+        df_filter.groupby("Công việc chính")["Lượt xem"].sum().reset_index()
     )
 
     # Lấy top 10 công việc chính có nhiều lượt xem nhất
@@ -186,27 +185,27 @@ with col2:
         return date_str
 
     # Áp dụng hàm để đảm bảo tất cả các giá trị datetime đều có giây
-    df_reshaped["Ngày cập nhật"] = df_reshaped["Ngày cập nhật"].apply(
+    df_filter["Ngày cập nhật"] = df_filter["Ngày cập nhật"].apply(
         ensure_full_datetime
     )
 
     # Chuyển đổi cột 'Ngày cập nhật' thành kiểu datetime, cho phép suy luận định dạng
-    df_reshaped["Ngày cập nhật"] = pd.to_datetime(
-        df_reshaped["Ngày cập nhật"],
+    df_filter["Ngày cập nhật"] = pd.to_datetime(
+        df_filter["Ngày cập nhật"],
         infer_datetime_format=True,
         dayfirst=True,
         errors="coerce",
     )
 
     # Loại bỏ các giá trị NaT
-    df_reshaped = df_reshaped.dropna(subset=["Ngày cập nhật"])
+    df_filter = df_filter.dropna(subset=["Ngày cập nhật"])
 
     # Tạo cột ngày
-    df_reshaped["Ngày"] = df_reshaped["Ngày cập nhật"].dt.date
+    df_filter["Ngày"] = df_filter["Ngày cập nhật"].dt.date
 
     # Tính tổng số lượng tuyển theo ngày
     df_daily = (
-        df_reshaped.groupby("Ngày")["Số lượng tuyển"].count().reset_index()
+        df_filter.groupby("Ngày")["Số lượng tuyển"].count().reset_index()
     )
 
     # Vẽ biểu đồ đường
